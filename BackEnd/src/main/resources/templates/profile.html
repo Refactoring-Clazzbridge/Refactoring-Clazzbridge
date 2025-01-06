@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>프로필 설정</title>
+  <!-- 스타일시트 링크 추가 -->
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<h1>프로필 설정</h1>
+<form th:action="@{/profile/update}" method="post" th:object="${userProfile}">
+  <label for="id">아이디</label>
+  <input type="text" id="id" th:field="*{id}" readonly/><br/>
+
+  <label for="password">비밀번호</label>
+  <input type="password" id="password" th:field="*{password}"/><br/>
+
+  <label for="email">이메일</label>
+  <input type="email" id="email" th:field="*{email}"/><br/>
+
+  <label for="phoneNumber">전화번호</label>
+  <input type="text" id="phoneNumber" th:field="*{phoneNumber}"/><br/>
+
+  <label for="githubUrl">깃허브 주소</label>
+  <input type="url" id="githubUrl" th:field="*{githubUrl}"/><br/>
+
+  <label for="bio">자기소개</label>
+  <textarea id="bio" th:field="*{bio}"></textarea><br/>
+
+  <button type="submit">저장</button>
+</form>
+</body>
+</html>

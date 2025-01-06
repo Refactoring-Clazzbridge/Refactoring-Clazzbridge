@@ -1,0 +1,8 @@
+common - 공통 예외
+
+
+1. 각자 패키지 만들고 커스텀 exception 생성 - 구조는 Post 참조
+
+2. GlobalExceptionHandler에 커스텀 exception 등록
+
+
