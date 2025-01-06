@@ -15,7 +15,6 @@ services:
       DATABASE_URL: jdbc:mysql://db_mysql:3306/clazzbridge
     depends_on:
       - db_mysql
-      - db_redis
 
   backend_websocket:
     build:
@@ -30,8 +29,7 @@ services:
       NODE_ENV: production
       REDIS_URL: redis://db_redis:6379
     depends_on:
-      - database1
-      - database2
+      - db_redis
 
   frontend:
     build:
