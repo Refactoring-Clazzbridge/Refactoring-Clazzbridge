@@ -1,0 +1,81 @@
+version: '3.8'
+
+services:
+  backend_spring:
+    build:
+      context: ./BackEnd
+      dockerfile: Dockerfile
+    container_name: backend_spring
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./BackEnd
+    environment:
+      SPRING_PROFILE_ACTIVE: prod
+      DATABASE_URL: jdbc:mysql://db_mysql:3306/clazzbridge
+    depends_on:
+      - db_mysql
+      - db_redis
+
+  backend_websocket:
+    build:
+      context: ./BackEnd-WebSocket
+      dockerfile: Dockerfile
+    container_name: backend_websocket
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./BackEnd-WebSocket/src:/usr/src/app
+    environment:
+      NODE_ENV: production
+      REDIS_URL: redis://db_redis:6379
+    depends_on:
+      - database1
+      - database2
+
+  frontend:
+    build:
+      context: ./FrontEnd
+      dockerfile: Dockerfile
+    container_name: frontend
+    ports:
+      - "80:80"
+    volumes:
+      - ./FrontEnd/build:/user/share/nginx/html
+    depends_on:
+      - backend_spring
+      - backend_websocket
+
+  db_mysql:
+    image: mysql:8.0
+    container_name: db_mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: mydb
+      MYSQL_USER: clazzbridge
+      MYSQL_PASSWORD: clazz123!
+    volumes:
+      - ./db_mysql/data:/var/lib/mysql
+
+  db_redis:
+    image: redis:alpine
+    container_name: db_redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./db_redis/data:/data
+
+  jenkins:
+    build:
+      context: ./jenkins
+      dockerfile: Dockerfile
+    container_name: jenkins
+    ports:
+      - "8081:8080"
+      - "50000:50000"
+    volumes:
+      - ./jenkins/data:var/jenkins_home
+    environment:
+      JENKINS_OPT: --httpPort=8080
