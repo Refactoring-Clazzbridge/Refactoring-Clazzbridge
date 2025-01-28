@@ -238,9 +238,7 @@ CREATE TABLE question
     created_at        DATETIME           NOT NULL COMMENT '질문일자',             -- 질문일자
     ai_answer         TEXT               NULL COMMENT 'AI자동답변',               -- AI 자동 답변
     is_recommended    BOOLEAN            NULL COMMENT '추천여부'                 -- 추천 여부
-);
-
-    COMMENT '질문';
+)COMMENT '질문';
 
     -- 답변
 CREATE TABLE answer
@@ -250,9 +248,7 @@ CREATE TABLE answer
         teacher_id      INT                NOT NULL COMMENT '교사 ID',             -- 교사 ID (외래키)
         content         TEXT               NOT NULL COMMENT '답변 내용',           -- 답변 내용
         created_at      DATETIME           NOT NULL COMMENT '답변일자'            -- 답변일자
-);
-
-    COMMENT '답변';
+)COMMENT '답변';
 
 
 
@@ -284,7 +280,7 @@ CREATE TABLE seat
 -- 좌석 유니크 인덱스
 CREATE UNIQUE INDEX UIX_seat
     ON seat ( -- 좌석
-             classroom_id ASC, -- 강의 ID
+             course_id ASC, -- 강의 ID
              seat_number ASC -- 좌석 번호
         );
 
