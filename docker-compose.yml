@@ -19,13 +19,14 @@ services:
       context: ./BackEnd-WebSocket
       dockerfile: Dockerfile
     container_name: backend_websocket
+    network_mode: "host"
     ports:
       - "3000:3000"
     volumes:
       - ./BackEnd-WebSocket/src:/usr/src/app
     environment:
       NODE_ENV: production
-      REDIS_URL: redis://db_redis:6379
+      REDIS_URL: redis://220.81.245.156:6379
     depends_on:
       - db_redis
 
