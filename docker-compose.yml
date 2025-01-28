@@ -6,6 +6,7 @@ services:
       context: ./BackEnd
       dockerfile: Dockerfile
     container_name: backend_spring
+    network_mode: "host"
     ports:
       - "8080:8080"
     environment:
