@@ -10,7 +10,7 @@ services:
       - "8080:8080"
     environment:
       SPRING_PROFILE_ACTIVE: prod
-      DATABASE_URL: jdbc:mysql://db_mysql:3306/clazzbridge
+      DATABASE_URL: jdbc:mysql://220.81.245.156:3306/mydb
     depends_on:
       - db_mysql
 
