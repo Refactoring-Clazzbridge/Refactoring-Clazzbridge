@@ -17,6 +17,7 @@ services:
       SPRING_DATASOURCE_USERNAME: clazzbridge
       SPRING_DATASOURCE_PASSWORD: clazz123!
       SPRING_CONFIG_LOCATION: /home/quitendexit/git/Refactoring-Clazzbridge/BackEnd/src/main/resources/application.properties
+      SPRING_JWT_SECRET: c2V1bGtpYW5nIHN0cmluZyBmb3IgYmFzZTY0IGVuY29kaW5n
     depends_on:
       - db_mysql
 
