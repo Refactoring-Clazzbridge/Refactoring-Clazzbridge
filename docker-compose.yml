@@ -9,11 +9,14 @@ services:
     network_mode: "host"
     ports:
       - "8080:8080"
+    volumes:
+      - ./config/application.properties:/home/quitendexit/git/Refactoring-Clazzbridge/BackEnd/src/main/resources/application.properties
     environment:
       SPRING_PROFILE_ACTIVE: dev
       SPRING_DATASOURCE_URL: jdbc:mysql://220.81.245.156:3306/mydb
       SPRING_DATASOURCE_USERNAME: clazzbridge
       SPRING_DATASOURCE_PASSWORD: clazz123!
+      SPRING_CONFIG_LOCATION: /home/quitendexit/git/Refactoring-Clazzbridge/BackEnd/src/main/resources/application.properties
     depends_on:
       - db_mysql
 
