@@ -42,6 +42,7 @@ services:
       context: ./FrontEnd
       dockerfile: Dockerfile
     container_name: frontend
+    network_mode: "host"
     ports:
       - "80:80"
     volumes:
