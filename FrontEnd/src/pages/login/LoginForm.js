@@ -39,10 +39,12 @@ function LoginForm() {
     setLoading(true);
 
     try {
+      console.log("로그인 시작")
       const response = await axios.post(process.env.REACT_APP_API_URL+"login", {
         memberId,
         password,
       });
+
 
       if (response.data) {
         updateToken(response.data.accessToken);
@@ -59,6 +61,8 @@ function LoginForm() {
         setError("");
       } else {
         setError("아이디 또는 비밀번호가 올바르지 않습니다.");
+        console.log("로그인 오류 발생")
+        console.log(process.env.REACT_APP_API_URL)
       }
     } catch (err) {
       console.error("Login failed:", err);
