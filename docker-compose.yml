@@ -46,6 +46,11 @@ services:
       - "80:80"
     volumes:
       - ./FrontEnd/build:/user/share/nginx/html
+    environment:
+      REACT_APP_API_URL: http://220.81.245.156:8080/api/
+      REACT_APP_SOCKET_SERVER_URI: http://220.81.245.156:3001
+      REACT_APP_SOCKET_HOST: ws
+      REACT_APP_PORT: 3000
     depends_on:
       - backend_spring
       - backend_websocket
