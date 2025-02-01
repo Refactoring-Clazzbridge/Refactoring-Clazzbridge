@@ -20,7 +20,7 @@ services:
     depends_on:
       - db_mysql
     networks:
-      - clazzbridge_network
+      - clazzbridge-network
 
   backend_websocket:
     build:
@@ -37,7 +37,7 @@ services:
     depends_on:
       - db_redis
     networks:
-      - clazzbridge_network
+      - clazzbridge-network
 
   frontend:
     build:
@@ -57,7 +57,7 @@ services:
       - backend_spring
       - backend_websocket
     networks:
-      - clazzbridge_network
+      - clazzbridge-network
 
   db_mysql:
     image: mysql:8.0
@@ -72,7 +72,7 @@ services:
     volumes:
       - ./db_mysql/data:/var/lib/mysql
     networks:
-      - clazzbridge_network
+      - clazzbridge-network
 
   db_redis:
     image: redis:alpine
@@ -82,7 +82,7 @@ services:
     volumes:
       - ./db_redis/data:/data
     networks:
-      - clazzbridge_network
+      - clazzbridge-network
 
   jenkins:
     build:
@@ -97,8 +97,5 @@ services:
     environment:
       JENKINS_OPT: --httpPort=8080
     networks:
-      - clazzbridge_network
+      - clazzbridge-network
 
-networks:
-  clazzbridge_network:
-    driver: bridge
