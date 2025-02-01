@@ -64,8 +64,8 @@ services:
     volumes:
       - ./FrontEnd/build:/user/share/nginx/html
     environment:
-      REACT_APP_API_URL: http://host.docker.internal:8080/api/
-      REACT_APP_SOCKET_SERVER_URI: http://host.docker.internal:3000
+      REACT_APP_API_URL: http://backend_spring:8080/api/
+      REACT_APP_SOCKET_SERVER_URI: http://backend_websocket:3000
       REACT_APP_SOCKET_HOST: ws
       REACT_APP_PORT: 3000
     depends_on:
