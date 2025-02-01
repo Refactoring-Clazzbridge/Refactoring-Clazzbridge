@@ -31,7 +31,7 @@ services:
       - ./BackEnd-WebSocket/src:/usr/src/app
     environment:
       NODE_ENV: production
-      REDIS_URL: redis://host.docker.internal:6379
+      REDIS_URL: redis://db_redis:6379
     depends_on:
       - db_redis
 
