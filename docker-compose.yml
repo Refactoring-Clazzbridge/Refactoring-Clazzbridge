@@ -99,3 +99,6 @@ services:
     networks:
       - clazzbridge-network
 
+networks:
+  clazzbridge-network:
+    driver: bridge
