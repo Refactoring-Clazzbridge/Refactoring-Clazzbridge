@@ -33,7 +33,7 @@ services:
       - ./BackEnd-WebSocket/src:/usr/src/app
     environment:
       NODE_ENV: production
-      REDIS_URL: redis://220.81.245.156:6379
+      REDIS_URL: redis://host.docker.internal:6379
     depends_on:
       - db_redis
 
@@ -48,8 +48,8 @@ services:
     volumes:
       - ./FrontEnd/build:/user/share/nginx/html
     environment:
-      REACT_APP_API_URL: http://220.81.245.156:8080/api/
-      REACT_APP_SOCKET_SERVER_URI: http://220.81.245.156:3001
+      REACT_APP_API_URL: http://host.docker.internal:8080/api/
+      REACT_APP_SOCKET_SERVER_URI: http://host.docker.internal:3001
       REACT_APP_SOCKET_HOST: ws
       REACT_APP_PORT: 3000
     depends_on:
