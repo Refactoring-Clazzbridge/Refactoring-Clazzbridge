@@ -1,6 +1,40 @@
-
-
 services:
+  db_mysql:
+    image: mysql:8.0
+    container_name: db_mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: mydb
+      MYSQL_USER: clazzbridge
+      MYSQL_PASSWORD: clazz123!
+    volumes:
+      - ./db_mysql/data:/var/lib/mysql
+
+  db_redis:
+    image: redis:alpine
+    container_name: db_redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./db_redis/data:/data
+
+  backend_websocket:
+    build:
+      context: ./BackEnd-WebSocket
+      dockerfile: Dockerfile
+    container_name: backend_websocket
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./BackEnd-WebSocket/src:/usr/src/app
+    environment:
+      NODE_ENV: production
+      REDIS_URL: redis://host.docker.internal:6379
+    depends_on:
+      - db_redis
+
   backend_spring:
     build:
       context: ./BackEnd
@@ -19,25 +53,6 @@ services:
       SPRING_JWT_SECRET: c2V1bGtpYW5nIHN0cmluZyBmb3IgYmFzZTY0IGVuY29kaW5n
     depends_on:
       - db_mysql
-    networks:
-      - clazzbridge-network
-
-  backend_websocket:
-    build:
-      context: ./BackEnd-WebSocket
-      dockerfile: Dockerfile
-    container_name: backend_websocket
-    ports:
-      - "3000:3000"
-    volumes:
-      - ./BackEnd-WebSocket/src:/usr/src/app
-    environment:
-      NODE_ENV: production
-      REDIS_URL: redis://db_redis:6379
-    depends_on:
-      - db_redis
-    networks:
-      - clazzbridge-network
 
   frontend:
     build:
@@ -49,40 +64,13 @@ services:
     volumes:
       - ./FrontEnd/build:/user/share/nginx/html
     environment:
-      REACT_APP_API_URL: http://backend_spring:8080/api/
-      REACT_APP_SOCKET_SERVER_URI: http://backend_websocket:3001
+      REACT_APP_API_URL: http://host.docker.internal:8080/api/
+      REACT_APP_SOCKET_SERVER_URI: http://host.docker.internal:3000
       REACT_APP_SOCKET_HOST: ws
       REACT_APP_PORT: 3000
     depends_on:
       - backend_spring
       - backend_websocket
-    networks:
-      - clazzbridge-network
-
-  db_mysql:
-    image: mysql:8.0
-    container_name: db_mysql
-    ports:
-      - "3306:3306"
-    environment:
-      MYSQL_ROOT_PASSWORD: rootpassword
-      MYSQL_DATABASE: mydb
-      MYSQL_USER: clazzbridge
-      MYSQL_PASSWORD: clazz123!
-    volumes:
-      - ./db_mysql/data:/var/lib/mysql
-    networks:
-      - clazzbridge-network
-
-  db_redis:
-    image: redis:alpine
-    container_name: db_redis
-    ports:
-      - "6379:6379"
-    volumes:
-      - ./db_redis/data:/data
-    networks:
-      - clazzbridge-network
 
   jenkins:
     build:
@@ -96,9 +84,3 @@ services:
       - ./jenkins/data:/var/jenkins_home
     environment:
       JENKINS_OPT: --httpPort=8080
-    networks:
-      - clazzbridge-network
-
-networks:
-  clazzbridge-network:
-    driver: bridge
