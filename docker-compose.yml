@@ -6,55 +6,58 @@ services:
       context: ./BackEnd
       dockerfile: Dockerfile
     container_name: backend_spring
-    network_mode: "host"
     ports:
       - "8080:8080"
     volumes:
       - ./config/application.properties:/home/quitendexit/git/Refactoring-Clazzbridge/BackEnd/src/main/resources/application.properties
     environment:
       SPRING_PROFILE_ACTIVE: dev
-      SPRING_DATASOURCE_URL: jdbc:mysql://220.81.245.156:3306/mydb
+      SPRING_DATASOURCE_URL: jdbc:mysql://db_mysql:3306/mydb
       SPRING_DATASOURCE_USERNAME: clazzbridge
       SPRING_DATASOURCE_PASSWORD: clazz123!
       SPRING_CONFIG_LOCATION: /home/quitendexit/git/Refactoring-Clazzbridge/BackEnd/src/main/resources/application.properties
       SPRING_JWT_SECRET: c2V1bGtpYW5nIHN0cmluZyBmb3IgYmFzZTY0IGVuY29kaW5n
     depends_on:
       - db_mysql
+    networks:
+      - clazzbridge_network
 
   backend_websocket:
     build:
       context: ./BackEnd-WebSocket
       dockerfile: Dockerfile
     container_name: backend_websocket
-    network_mode: "host"
     ports:
       - "3000:3000"
     volumes:
       - ./BackEnd-WebSocket/src:/usr/src/app
     environment:
       NODE_ENV: production
-      REDIS_URL: redis://220.81.245.156:6379
+      REDIS_URL: redis://db_redis:6379
     depends_on:
       - db_redis
+    networks:
+      - clazzbridge_network
 
   frontend:
     build:
       context: ./FrontEnd
       dockerfile: Dockerfile
     container_name: frontend
-    network_mode: "host"
     ports:
       - "80:80"
     volumes:
       - ./FrontEnd/build:/user/share/nginx/html
     environment:
-      REACT_APP_API_URL: http://220.81.245.156:8080/api/
-      REACT_APP_SOCKET_SERVER_URI: http://220.81.245.156:3001
+      REACT_APP_API_URL: http://backend_spring:8080/api/
+      REACT_APP_SOCKET_SERVER_URI: http://backend_websocket:3001
       REACT_APP_SOCKET_HOST: ws
       REACT_APP_PORT: 3000
     depends_on:
       - backend_spring
       - backend_websocket
+    networks:
+      - clazzbridge_network
 
   db_mysql:
     image: mysql:8.0
@@ -68,6 +71,8 @@ services:
       MYSQL_PASSWORD: clazz123!
     volumes:
       - ./db_mysql/data:/var/lib/mysql
+    networks:
+      - clazzbridge_network
 
   db_redis:
     image: redis:alpine
@@ -76,6 +81,8 @@ services:
       - "6379:6379"
     volumes:
       - ./db_redis/data:/data
+    networks:
+      - clazzbridge_network
 
   jenkins:
     build:
@@ -89,3 +96,9 @@ services:
       - ./jenkins/data:/var/jenkins_home
     environment:
       JENKINS_OPT: --httpPort=8080
+    networks:
+      - clazzbridge_network
+
+networks:
+  clazzbridge_network:
+    driver: bridge
