@@ -11,6 +11,8 @@ services:
       MYSQL_PASSWORD: clazz123!
     volumes:
       - ./db_mysql/data:/var/lib/mysql
+    networks:
+      - clazzbridge_network_1
 
   db_redis:
     image: redis:alpine
@@ -19,6 +21,8 @@ services:
       - "6379:6379"
     volumes:
       - ./db_redis/data:/data
+    networks:
+      - clazzbridge_network_1
 
   backend_websocket:
     build:
@@ -34,6 +38,8 @@ services:
       REDIS_URL: redis://db_redis:6379
     depends_on:
       - db_redis
+    networks:
+      - clazzbridge_network_1
 
   backend_spring:
     build:
@@ -53,6 +59,8 @@ services:
       SPRING_JWT_SECRET: c2V1bGtpYW5nIHN0cmluZyBmb3IgYmFzZTY0IGVuY29kaW5n
     depends_on:
       - db_mysql
+    networks:
+      - clazzbridge_network_1
 
   frontend:
     build:
@@ -71,6 +79,8 @@ services:
     depends_on:
       - backend_spring
       - backend_websocket
+    networks:
+      - clazzbridge_network_1
 
   jenkins:
     build:
@@ -84,3 +94,7 @@ services:
       - ./jenkins/data:/var/jenkins_home
     environment:
       JENKINS_OPT: --httpPort=8080
+
+networks:
+  clazzbridge_network_1:
+    driver: bridge
